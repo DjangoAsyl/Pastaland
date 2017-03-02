@@ -115,6 +115,7 @@ local function check_violation (ci)
 end
 
 local function check_players (info)
+    if not ANTILAG then return end
     for ci in iterators.players() do 
         lag = obuf.mean(ci.extra.pkg_delta)
 
