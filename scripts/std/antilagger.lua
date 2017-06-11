@@ -80,6 +80,8 @@ spaghetti.addhook("clientdisconnect", lagger_dc)
 
 -- enetpacket
 local function received_packet (info)
+    if info.ci.state.state ~= engine.CS_ALIVE then info.ci.extra.last_packet = -1; return end -- we dont want info of dead people 
+    if info.ci.extra.last_packet == -1 then info.ci.extra.last_packet = engine.totalmillis; return end -- player alive now, we take that timestamp
     local d = engine.totalmillis - info.ci.extra.last_packet
     if d >= 33 then obuf.push(info.ci.extra.pkg_delta, d) end -- don't double count simultanious arriving packets
     info.ci.extra.last_packet = engine.totalmillis
